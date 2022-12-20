@@ -3,7 +3,7 @@ const bcryptjs = require("bcryptjs");
 const Usuario = require("../models/usuario");
 
 const usuariosGet = async (req = request, res = response) => {
-  const { limite = 3, desde = 0 } = req.query;
+  const { limite = 15, desde = 0 } = req.query;
   const query = { estado: true };
 
   // const usuarios = await Usuario.find(query).skip(desde).limit(limite);
@@ -57,10 +57,16 @@ const usuariosPatch = (req, res) => {
     msg: "patch  API - controller",
   });
 };
-const usuariosDelete = (req, res) => {
+const usuariosDelete = async (req, res) => {
+  const { id } = req.params;
+
+  //Borramos fisicamente
+  // const usuario = await Usuario.findByIdAndDelete(id);
+
+  const usuario = await Usuario.findByIdAndUpdate(id, { estado: false });
+
   res.json({
-    ok: true,
-    msg: "delete  API - controller",
+    id,
   });
 };
 
