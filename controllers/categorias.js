@@ -8,7 +8,10 @@ const obtenerCategorias = async (req, res = response) => {
 
   const [total, categorias] = await Promise.all([
     Categoria.countDocuments(query),
-    Categoria.find(query).skip(desde).limit(limite),
+    Categoria.find(query)
+      .populate("usuario", "nombre")
+      .skip(desde)
+      .limit(limite),
   ]);
 
   res.json({
@@ -18,6 +21,12 @@ const obtenerCategorias = async (req, res = response) => {
 };
 
 //obtenerCategoria - populate{}
+const obtenerCategoria = async (req, res = response) => {
+  const { id } = req.params;
+  const categoria = await Categoria.findById(id).populate("usuario", "nombre");
+
+  res.json(categoria);
+};
 
 const crearCategoria = async (req, res = response) => {
   const nombre = req.body.nombre.toUpperCase();
@@ -48,4 +57,5 @@ const crearCategoria = async (req, res = response) => {
 module.exports = {
   crearCategoria,
   obtenerCategorias,
+  obtenerCategoria,
 };

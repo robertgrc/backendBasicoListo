@@ -3,7 +3,9 @@ const { check } = require("express-validator");
 const {
   crearCategoria,
   obtenerCategorias,
+  obtenerCategoria,
 } = require("../controllers/categorias");
+const { existeCategoriaPorId } = require("../helpers/db-validators");
 const { validarJWT, validarCampos } = require("../middlewares");
 
 const router = Router();
@@ -17,12 +19,13 @@ router.get("/", obtenerCategorias);
 router.get(
   "/:id",
   [
-    // check("id").custom(existeCategoria)
+    check("id", "No es un id de Mongo valido").isMongoId(),
+    validarCampos,
+    check("id").custom(existeCategoriaPorId),
   ],
-  (req, res) => {
-    res.json("get-id");
-  }
+  obtenerCategoria
 );
+
 //Crear categoria - privado - cualquier persona con token valido
 router.post(
   "/",
