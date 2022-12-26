@@ -38,9 +38,11 @@ const buscar = (req, res = response) => {
     case "usuarios":
       buscarUsuarios(termino, res);
       break;
-    case "categoria":
+    case "categorias":
+      buscarCategorias(termino, res);
       break;
     case "productos":
+      buscarProductos(termino, res);
       break;
 
     default:
